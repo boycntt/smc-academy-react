@@ -1,14 +1,19 @@
 services:
   - type: web
-    name: smc-academy-react
+    name: smc-academy
     runtime: node
     plan: free
-    buildCommand: npm install && cd client && npm install && npm run build
+    buildCommand: |
+      npm install
+      cd client && npm install && npm run build && cd ..
     startCommand: node server/index.js
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        generateValue: true
     disk:
       name: sqlite-data
       mountPath: /var/data
       sizeGB: 1
+    healthCheckPath: /api/health
