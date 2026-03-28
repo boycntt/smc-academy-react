@@ -3,11 +3,14 @@ import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Journal from './pages/Journal'
 import Knowledge from './pages/Knowledge'
+import Patterns from './pages/Patterns'
 import Watchlist from './pages/Watchlist'
 import Calculator from './pages/Calculator'
 import SMCLearn from './pages/SMCLearn'
 import Psychology from './pages/Psychology'
-import Patterns from './pages/Patterns'
+import KillZone from './pages/KillZone'
+import Analytics from './pages/Analytics'
+import DailyReview from './pages/DailyReview'
 
 const API = ''
 
@@ -29,6 +32,12 @@ function App() {
 
   const logout = () => { setUser(null); localStorage.removeItem('smc_user') }
 
+  const navItem = (to, icon, label) => (
+    <NavLink to={to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end={to === '/'}>
+      <span style={{ width: 24, textAlign: 'center' }}>{icon}</span> {label}
+    </NavLink>
+  )
+
   return (
     <BrowserRouter>
       <div className="app">
@@ -43,7 +52,7 @@ function App() {
             {user ? (
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <img src={user.avatar} style={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid var(--accent)' }} />
+                  <img src={user.avatar} style={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid var(--accent)' }} alt="" />
                   <div>
                     <div style={{ fontSize: 13, fontWeight: 600 }}>{user.name}</div>
                     <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>{user.email}</div>
@@ -58,31 +67,25 @@ function App() {
             )}
           </div>
 
-          {/* Nav */}
-          <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end>
-            <span style={{ width: 24, textAlign: 'center' }}>📈</span> Tổng quan
-          </NavLink>
-          <NavLink to="/journal" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span style={{ width: 24, textAlign: 'center' }}>📓</span> Nhật ký
-          </NavLink>
-          <NavLink to="/knowledge" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span style={{ width: 24, textAlign: 'center' }}>📚</span> SMC Knowledge
-          </NavLink>
-          <NavLink to="/patterns" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span style={{ width: 24, textAlign: 'center' }}>🎯</span> Patterns
-          </NavLink>
-          <NavLink to="/learn" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span style={{ width: 24, textAlign: 'center' }}>🎓</span> Học SMC
-          </NavLink>
-          <NavLink to="/psychology" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span style={{ width: 24, textAlign: 'center' }}>🧠</span> Tâm lý GD
-          </NavLink>
-          <NavLink to="/watchlist" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span style={{ width: 24, textAlign: 'center' }}>👁️</span> Watchlist
-          </NavLink>
-          <NavLink to="/calculator" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <span style={{ width: 24, textAlign: 'center' }}>🧮</span> Calculator
-          </NavLink>
+          {/* Nav - Trading */}
+          <div style={{ padding: '0 0 8px', fontSize: 11, color: 'var(--text-dim)', paddingLeft: 20, textTransform: 'uppercase', letterSpacing: 1 }}>Trading</div>
+          {navItem('/', '📈', 'Tổng quan')}
+          {navItem('/journal', '📓', 'Nhật ký')}
+          {navItem('/watchlist', '👁️', 'Watchlist')}
+          {navItem('/killzone', '⏰', 'Kill Zone')}
+          {navItem('/analytics', '📊', 'Analytics')}
+          {navItem('/review', '📝', 'Daily Review')}
+
+          {/* Nav - Learning */}
+          <div style={{ padding: '12px 0 8px', fontSize: 11, color: 'var(--text-dim)', paddingLeft: 20, textTransform: 'uppercase', letterSpacing: 1 }}>Học tập</div>
+          {navItem('/knowledge', '📚', 'SMC Knowledge')}
+          {navItem('/patterns', '🎯', 'Patterns')}
+          {navItem('/learn', '🎓', 'Học SMC')}
+          {navItem('/psychology', '🧠', 'Tâm lý GD')}
+
+          {/* Nav - Tools */}
+          <div style={{ padding: '12px 0 8px', fontSize: 11, color: 'var(--text-dim)', paddingLeft: 20, textTransform: 'uppercase', letterSpacing: 1 }}>Công cụ</div>
+          {navItem('/calculator', '🧮', 'Calculator')}
         </nav>
 
         <div className="main">
@@ -95,6 +98,9 @@ function App() {
             <Route path="/psychology" element={<Psychology />} />
             <Route path="/watchlist" element={<Watchlist />} />
             <Route path="/calculator" element={<Calculator />} />
+            <Route path="/killzone" element={<KillZone />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/review" element={<DailyReview />} />
           </Routes>
         </div>
       </div>
