@@ -11,6 +11,10 @@ import Psychology from './pages/Psychology'
 import KillZone from './pages/KillZone'
 import Analytics from './pages/Analytics'
 import DailyReview from './pages/DailyReview'
+import TradeCalendar from './pages/TradeCalendar'
+import RiskManager from './pages/RiskManager'
+import Backtest from './pages/Backtest'
+import Settings from './pages/Settings'
 
 function App() {
   const [user, setUser] = useState(null)
@@ -28,7 +32,7 @@ function App() {
   }
   const logout = () => { setUser(null); localStorage.removeItem('smc_user') }
 
-  const NavItem = ({ to, icon, label, end }) => (
+  const NI = ({ to, icon, label, end }) => (
     <NavLink to={to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end={end}>
       <span style={{ width: 22, textAlign: 'center', fontSize: 16 }}>{icon}</span>
       <span>{label}</span>
@@ -36,39 +40,23 @@ function App() {
   )
 
   const SectionLabel = ({ children }) => (
-    <div style={{
-      padding: '16px 20px 8px',
-      fontSize: 10,
-      color: 'var(--text-muted)',
-      textTransform: 'uppercase',
-      letterSpacing: 1.5,
-      fontWeight: 700
-    }}>{children}</div>
+    <div style={{ padding: '16px 20px 8px', fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 700 }}>{children}</div>
   )
 
   return (
     <BrowserRouter>
       <div className="app">
         <nav className="sidebar">
-          {/* Logo */}
           <div style={{ padding: '0 20px 20px', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: 'linear-gradient(135deg, var(--accent), var(--accent-light))',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 18
-              }}>📊</div>
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, var(--accent), var(--accent-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>📊</div>
               <div>
-                <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -0.5 }}>
-                  <span style={{ color: 'var(--accent-light)' }}>SMC</span> Academy
-                </div>
+                <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -0.5 }}><span style={{ color: 'var(--accent-light)' }}>SMC</span> Academy</div>
                 <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 1 }}>v3.0 React</div>
               </div>
             </div>
           </div>
 
-          {/* User */}
           <div style={{ padding: '0 16px 16px', borderBottom: '1px solid var(--border)', marginBottom: 12, margin: '0 12px 12px' }}>
             {user ? (
               <div>
@@ -79,56 +67,61 @@ function App() {
                     <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{user.email}</div>
                   </div>
                 </div>
-                <button onClick={logout} className="btn btn-ghost btn-sm" style={{ width: '100%', marginTop: 8, justifyContent: 'center' }}>
-                  🚪 Đăng xuất
-                </button>
+                <button onClick={logout} className="btn btn-ghost btn-sm" style={{ width: '100%', marginTop: 8, justifyContent: 'center' }}>🚪 Đăng xuất</button>
               </div>
             ) : (
-              <button onClick={login} style={{
-                width: '100%', padding: '10px 16px',
-                background: 'linear-gradient(135deg, var(--accent), var(--accent-light))',
-                color: 'white', border: 'none', borderRadius: 'var(--radius-sm)',
-                cursor: 'pointer', fontSize: 14, fontWeight: 600,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                transition: 'var(--transition)'
-              }}>
-                🔐 Đăng nhập
-              </button>
+              <button onClick={login} style={{ width: '100%', padding: '10px 16px', background: 'linear-gradient(135deg, var(--accent), var(--accent-light))', color: 'white', border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>🔐 Đăng nhập</button>
             )}
           </div>
 
-          {/* Navigation */}
+          {/* ═══ TRADING ═══ */}
           <SectionLabel>Trading</SectionLabel>
-          <NavItem to="/" icon="📈" label="Tổng quan" end />
-          <NavItem to="/journal" icon="📓" label="Nhật ký" />
-          <NavItem to="/watchlist" icon="👁️" label="Watchlist" />
-          <NavItem to="/killzone" icon="⏰" label="Kill Zone" />
-          <NavItem to="/analytics" icon="📊" label="Analytics" />
-          <NavItem to="/review" icon="📝" label="Daily Review" />
+          <NI to="/" icon="📈" label="Tổng quan" end />
+          <NI to="/journal" icon="📓" label="Nhật ký giao dịch" />
+          <NI to="/watchlist" icon="👁️" label="Watchlist" />
+          <NI to="/calendar" icon="📅" label="Trade Calendar" />
 
+          {/* ═══ PHÂN TÍCH ═══ */}
+          <SectionLabel>Phân tích</SectionLabel>
+          <NI to="/killzone" icon="⏰" label="Kill Zone Timer" />
+          <NI to="/analytics" icon="📊" label="Analytics" />
+          <NI to="/risk" icon="🛡️" label="Risk Manager" />
+          <NI to="/backtest" icon="🔬" label="Backtest" />
+
+          {/* ═══ REVIEW ═══ */}
+          <SectionLabel>Đánh giá</SectionLabel>
+          <NI to="/review" icon="📝" label="Daily Review" />
+
+          {/* ═══ HỌC TẬP ═══ */}
           <SectionLabel>Học tập</SectionLabel>
-          <NavItem to="/knowledge" icon="📚" label="SMC Knowledge" />
-          <NavItem to="/patterns" icon="🎯" label="Patterns" />
-          <NavItem to="/learn" icon="🎓" label="Học SMC" />
-          <NavItem to="/psychology" icon="🧠" label="Tâm lý GD" />
+          <NI to="/knowledge" icon="📚" label="SMC Knowledge" />
+          <NI to="/patterns" icon="🎯" label="Patterns" />
+          <NI to="/learn" icon="🎓" label="Khóa học SMC" />
+          <NI to="/psychology" icon="🧠" label="Tâm lý GD" />
 
+          {/* ═══ CÔNG CỤ ═══ */}
           <SectionLabel>Công cụ</SectionLabel>
-          <NavItem to="/calculator" icon="🧮" label="Calculator" />
+          <NI to="/calculator" icon="🧮" label="Calculator" />
+          <NI to="/settings" icon="⚙️" label="Cài đặt" />
         </nav>
 
         <div className="main">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/journal" element={<Journal />} />
+            <Route path="/watchlist" element={<Watchlist />} />
+            <Route path="/calendar" element={<TradeCalendar />} />
+            <Route path="/killzone" element={<KillZone />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/risk" element={<RiskManager />} />
+            <Route path="/backtest" element={<Backtest />} />
+            <Route path="/review" element={<DailyReview />} />
             <Route path="/knowledge" element={<Knowledge />} />
             <Route path="/patterns" element={<Patterns />} />
             <Route path="/learn" element={<SMCLearn />} />
             <Route path="/psychology" element={<Psychology />} />
-            <Route path="/watchlist" element={<Watchlist />} />
             <Route path="/calculator" element={<Calculator />} />
-            <Route path="/killzone" element={<KillZone />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/review" element={<DailyReview />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </div>
