@@ -12,8 +12,6 @@ import KillZone from './pages/KillZone'
 import Analytics from './pages/Analytics'
 import DailyReview from './pages/DailyReview'
 
-const API = ''
-
 function App() {
   const [user, setUser] = useState(null)
 
@@ -24,68 +22,98 @@ function App() {
 
   const login = () => {
     const name = prompt('Nhập tên của bạn:') || 'Trader'
-    const u = { name, email: 'local@smc.app', avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6c5ce7&color=fff` }
+    const u = { name, email: 'local@smc.app', avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=7c6cf0&color=fff&bold=true` }
     setUser(u)
     localStorage.setItem('smc_user', JSON.stringify(u))
-    fetch(`${API}/api/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(u) })
   }
-
   const logout = () => { setUser(null); localStorage.removeItem('smc_user') }
 
-  const navItem = (to, icon, label) => (
-    <NavLink to={to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end={to === '/'}>
-      <span style={{ width: 24, textAlign: 'center' }}>{icon}</span> {label}
+  const NavItem = ({ to, icon, label, end }) => (
+    <NavLink to={to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end={end}>
+      <span style={{ width: 22, textAlign: 'center', fontSize: 16 }}>{icon}</span>
+      <span>{label}</span>
     </NavLink>
+  )
+
+  const SectionLabel = ({ children }) => (
+    <div style={{
+      padding: '16px 20px 8px',
+      fontSize: 10,
+      color: 'var(--text-muted)',
+      textTransform: 'uppercase',
+      letterSpacing: 1.5,
+      fontWeight: 700
+    }}>{children}</div>
   )
 
   return (
     <BrowserRouter>
       <div className="app">
         <nav className="sidebar">
-          <div style={{ padding: '0 20px 24px', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
-            <h1 style={{ fontSize: 20 }}>📊 <span style={{ color: 'var(--accent-light)' }}>SMC</span>Academy</h1>
-            <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>React + Node.js v3.0</div>
+          {/* Logo */}
+          <div style={{ padding: '0 20px 20px', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 10,
+                background: 'linear-gradient(135deg, var(--accent), var(--accent-light))',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 18
+              }}>📊</div>
+              <div>
+                <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -0.5 }}>
+                  <span style={{ color: 'var(--accent-light)' }}>SMC</span> Academy
+                </div>
+                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 1 }}>v3.0 React</div>
+              </div>
+            </div>
           </div>
 
-          {/* Login */}
-          <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
+          {/* User */}
+          <div style={{ padding: '0 16px 16px', borderBottom: '1px solid var(--border)', marginBottom: 12, margin: '0 12px 12px' }}>
             {user ? (
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <img src={user.avatar} style={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid var(--accent)' }} alt="" />
-                  <div>
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{user.name}</div>
-                    <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>{user.email}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0' }}>
+                  <img src={user.avatar} alt="" style={{ width: 34, height: 34, borderRadius: 10 }} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
+                    <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{user.email}</div>
                   </div>
                 </div>
-                <button onClick={logout} className="btn btn-danger btn-sm" style={{ width: '100%', marginTop: 10 }}>🚪 Đăng xuất</button>
+                <button onClick={logout} className="btn btn-ghost btn-sm" style={{ width: '100%', marginTop: 8, justifyContent: 'center' }}>
+                  🚪 Đăng xuất
+                </button>
               </div>
             ) : (
-              <button onClick={login} style={{ width: '100%', padding: 10, background: 'var(--accent)', color: 'white', border: 'none', borderRadius: 8, cursor: 'pointer', fontSize: 14, fontWeight: 600 }}>
+              <button onClick={login} style={{
+                width: '100%', padding: '10px 16px',
+                background: 'linear-gradient(135deg, var(--accent), var(--accent-light))',
+                color: 'white', border: 'none', borderRadius: 'var(--radius-sm)',
+                cursor: 'pointer', fontSize: 14, fontWeight: 600,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                transition: 'var(--transition)'
+              }}>
                 🔐 Đăng nhập
               </button>
             )}
           </div>
 
-          {/* Nav - Trading */}
-          <div style={{ padding: '0 0 8px', fontSize: 11, color: 'var(--text-dim)', paddingLeft: 20, textTransform: 'uppercase', letterSpacing: 1 }}>Trading</div>
-          {navItem('/', '📈', 'Tổng quan')}
-          {navItem('/journal', '📓', 'Nhật ký')}
-          {navItem('/watchlist', '👁️', 'Watchlist')}
-          {navItem('/killzone', '⏰', 'Kill Zone')}
-          {navItem('/analytics', '📊', 'Analytics')}
-          {navItem('/review', '📝', 'Daily Review')}
+          {/* Navigation */}
+          <SectionLabel>Trading</SectionLabel>
+          <NavItem to="/" icon="📈" label="Tổng quan" end />
+          <NavItem to="/journal" icon="📓" label="Nhật ký" />
+          <NavItem to="/watchlist" icon="👁️" label="Watchlist" />
+          <NavItem to="/killzone" icon="⏰" label="Kill Zone" />
+          <NavItem to="/analytics" icon="📊" label="Analytics" />
+          <NavItem to="/review" icon="📝" label="Daily Review" />
 
-          {/* Nav - Learning */}
-          <div style={{ padding: '12px 0 8px', fontSize: 11, color: 'var(--text-dim)', paddingLeft: 20, textTransform: 'uppercase', letterSpacing: 1 }}>Học tập</div>
-          {navItem('/knowledge', '📚', 'SMC Knowledge')}
-          {navItem('/patterns', '🎯', 'Patterns')}
-          {navItem('/learn', '🎓', 'Học SMC')}
-          {navItem('/psychology', '🧠', 'Tâm lý GD')}
+          <SectionLabel>Học tập</SectionLabel>
+          <NavItem to="/knowledge" icon="📚" label="SMC Knowledge" />
+          <NavItem to="/patterns" icon="🎯" label="Patterns" />
+          <NavItem to="/learn" icon="🎓" label="Học SMC" />
+          <NavItem to="/psychology" icon="🧠" label="Tâm lý GD" />
 
-          {/* Nav - Tools */}
-          <div style={{ padding: '12px 0 8px', fontSize: 11, color: 'var(--text-dim)', paddingLeft: 20, textTransform: 'uppercase', letterSpacing: 1 }}>Công cụ</div>
-          {navItem('/calculator', '🧮', 'Calculator')}
+          <SectionLabel>Công cụ</SectionLabel>
+          <NavItem to="/calculator" icon="🧮" label="Calculator" />
         </nav>
 
         <div className="main">
