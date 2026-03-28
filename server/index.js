@@ -10,8 +10,11 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Serve React build in production
-const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
+// Serve React build
+const clientBuildPath = path.resolve(__dirname, '..', 'client', 'dist');
+console.log('Serving client from:', clientBuildPath);
+console.log('Client exists:', require('fs').existsSync(clientBuildPath));
+
 app.use(express.static(clientBuildPath));
 
 // Database — use local data directory on Render (no disk needed)
