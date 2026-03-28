@@ -18,115 +18,88 @@ import Settings from './pages/Settings'
 
 function App() {
   const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    const saved = localStorage.getItem('smc_user')
-    if (saved) setUser(JSON.parse(saved))
-  }, [])
+  useEffect(() => { const s = localStorage.getItem('smc_user'); if (s) setUser(JSON.parse(s)) }, [])
 
   const login = () => {
-    const name = prompt('Nhập tên của bạn:') || 'Trader'
-    const u = { name, email: 'local@smc.app', avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=7c6cf0&color=fff&bold=true` }
-    setUser(u)
-    localStorage.setItem('smc_user', JSON.stringify(u))
+    const n = prompt('Nhập tên:') || 'Trader'
+    const u = { name: n, avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(n)}&background=6a4ce0&color=fff&bold=true` }
+    setUser(u); localStorage.setItem('smc_user', JSON.stringify(u))
   }
   const logout = () => { setUser(null); localStorage.removeItem('smc_user') }
 
-  const NI = ({ to, icon, label, end }) => (
-    <NavLink to={to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} end={end}>
-      <span style={{ width: 22, textAlign: 'center', fontSize: 16 }}>{icon}</span>
-      <span>{label}</span>
-    </NavLink>
-  )
-
-  const SectionLabel = ({ children }) => (
-    <div style={{ padding: '16px 20px 8px', fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: 700 }}>{children}</div>
-  )
+  const N = ({ to, i, l }) => <NavLink to={to} end={to==='/'} className={({isActive}) => `nav-item ${isActive?'active':''}`}><span style={{width:20,textAlign:'center',fontSize:14}}>{i}</span>{l}</NavLink>
+  const S = ({t}) => <div style={{padding:'12px 16px 4px',fontSize:9,color:'var(--text-muted)',textTransform:'uppercase',letterSpacing:1.5,fontWeight:700}}>{t}</div>
 
   return (
     <BrowserRouter>
-      <div className="app">
-        <nav className="sidebar">
-          <div style={{ padding: '0 20px 20px', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'linear-gradient(135deg, var(--accent), var(--accent-light))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>📊</div>
-              <div>
-                <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: -0.5 }}><span style={{ color: 'var(--accent-light)' }}>SMC</span> Academy</div>
-                <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 1 }}>v3.0 React</div>
-              </div>
-            </div>
+    <div className="app">
+      <nav className="sidebar">
+        <div style={{padding:'0 16px 14px',borderBottom:'1px solid var(--border)',marginBottom:8}}>
+          <div style={{display:'flex',alignItems:'center',gap:8}}>
+            <div style={{width:30,height:30,borderRadius:8,background:'linear-gradient(135deg,var(--accent),var(--accent-light))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14}}>📊</div>
+            <div><div style={{fontSize:14,fontWeight:700}}><span style={{color:'var(--accent-light)'}}>SMC</span> Academy</div><div style={{fontSize:8,color:'var(--text-muted)'}}>v3.0</div></div>
           </div>
-
-          <div style={{ padding: '0 16px 16px', borderBottom: '1px solid var(--border)', marginBottom: 12, margin: '0 12px 12px' }}>
-            {user ? (
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 0' }}>
-                  <img src={user.avatar} alt="" style={{ width: 34, height: 34, borderRadius: 10 }} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{user.name}</div>
-                    <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{user.email}</div>
-                  </div>
-                </div>
-                <button onClick={logout} className="btn btn-ghost btn-sm" style={{ width: '100%', marginTop: 8, justifyContent: 'center' }}>🚪 Đăng xuất</button>
-              </div>
-            ) : (
-              <button onClick={login} style={{ width: '100%', padding: '10px 16px', background: 'linear-gradient(135deg, var(--accent), var(--accent-light))', color: 'white', border: 'none', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontSize: 14, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>🔐 Đăng nhập</button>
-            )}
-          </div>
-
-          {/* ═══ TRADING ═══ */}
-          <SectionLabel>Trading</SectionLabel>
-          <NI to="/" icon="📈" label="Tổng quan" end />
-          <NI to="/journal" icon="📓" label="Nhật ký giao dịch" />
-          <NI to="/watchlist" icon="👁️" label="Watchlist" />
-          <NI to="/calendar" icon="📅" label="Trade Calendar" />
-
-          {/* ═══ PHÂN TÍCH ═══ */}
-          <SectionLabel>Phân tích</SectionLabel>
-          <NI to="/killzone" icon="⏰" label="Kill Zone Timer" />
-          <NI to="/analytics" icon="📊" label="Analytics" />
-          <NI to="/risk" icon="🛡️" label="Risk Manager" />
-          <NI to="/backtest" icon="🔬" label="Backtest" />
-
-          {/* ═══ REVIEW ═══ */}
-          <SectionLabel>Đánh giá</SectionLabel>
-          <NI to="/review" icon="📝" label="Daily Review" />
-
-          {/* ═══ HỌC TẬP ═══ */}
-          <SectionLabel>Học tập</SectionLabel>
-          <NI to="/knowledge" icon="📚" label="SMC Knowledge" />
-          <NI to="/patterns" icon="🎯" label="Patterns" />
-          <NI to="/learn" icon="🎓" label="Khóa học SMC" />
-          <NI to="/psychology" icon="🧠" label="Tâm lý GD" />
-
-          {/* ═══ CÔNG CỤ ═══ */}
-          <SectionLabel>Công cụ</SectionLabel>
-          <NI to="/calculator" icon="🧮" label="Calculator" />
-          <NI to="/settings" icon="⚙️" label="Cài đặt" />
-        </nav>
-
-        <div className="main">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/journal" element={<Journal />} />
-            <Route path="/watchlist" element={<Watchlist />} />
-            <Route path="/calendar" element={<TradeCalendar />} />
-            <Route path="/killzone" element={<KillZone />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/risk" element={<RiskManager />} />
-            <Route path="/backtest" element={<Backtest />} />
-            <Route path="/review" element={<DailyReview />} />
-            <Route path="/knowledge" element={<Knowledge />} />
-            <Route path="/patterns" element={<Patterns />} />
-            <Route path="/learn" element={<SMCLearn />} />
-            <Route path="/psychology" element={<Psychology />} />
-            <Route path="/calculator" element={<Calculator />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
         </div>
+
+        <div style={{padding:'0 12px 10px',borderBottom:'1px solid var(--border)',marginBottom:6}}>
+          {user ? (
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              <img src={user.avatar} alt="" style={{width:26,height:26,borderRadius:6}}/>
+              <div style={{flex:1,minWidth:0,fontSize:12,fontWeight:600,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user.name}</div>
+              <button onClick={logout} style={{background:'none',border:'none',cursor:'pointer',fontSize:12,opacity:0.5}}>🚪</button>
+            </div>
+          ) : <button onClick={login} style={{width:'100%',padding:'7px',background:'linear-gradient(135deg,var(--accent),var(--accent-light))',color:'white',border:'none',borderRadius:8,cursor:'pointer',fontSize:12,fontWeight:600}}>🔐 Đăng nhập</button>}
+        </div>
+
+        <div style={{flex:1,overflowY:'auto',paddingBottom:8}}>
+          <S t="Trading"/>
+          <N to="/" i="📈" l="Tổng quan"/>
+          <N to="/journal" i="📓" l="Nhật ký"/>
+          <N to="/watchlist" i="👁️" l="Watchlist"/>
+          <N to="/calendar" i="📅" l="Calendar"/>
+
+          <S t="Phân tích"/>
+          <N to="/killzone" i="⏰" l="Kill Zone"/>
+          <N to="/analytics" i="📊" l="Analytics"/>
+          <N to="/risk" i="🛡️" l="Risk Manager"/>
+          <N to="/backtest" i="🔬" l="Backtest"/>
+
+          <S t="Đánh giá"/>
+          <N to="/review" i="📝" l="Daily Review"/>
+
+          <S t="Học tập"/>
+          <N to="/knowledge" i="📚" l="Knowledge"/>
+          <N to="/patterns" i="🎯" l="Patterns"/>
+          <N to="/learn" i="🎓" l="Khóa học"/>
+          <N to="/psychology" i="🧠" l="Tâm lý GD"/>
+
+          <S t="Công cụ"/>
+          <N to="/calculator" i="🧮" l="Calculator"/>
+          <N to="/settings" i="⚙️" l="Cài đặt"/>
+        </div>
+      </nav>
+
+      <div className="main">
+        <Routes>
+          <Route path="/" element={<Dashboard/>}/>
+          <Route path="/journal" element={<Journal/>}/>
+          <Route path="/knowledge" element={<Knowledge/>}/>
+          <Route path="/patterns" element={<Patterns/>}/>
+          <Route path="/learn" element={<SMCLearn/>}/>
+          <Route path="/psychology" element={<Psychology/>}/>
+          <Route path="/watchlist" element={<Watchlist/>}/>
+          <Route path="/calculator" element={<Calculator/>}/>
+          <Route path="/killzone" element={<KillZone/>}/>
+          <Route path="/analytics" element={<Analytics/>}/>
+          <Route path="/review" element={<DailyReview/>}/>
+          <Route path="/calendar" element={<TradeCalendar/>}/>
+          <Route path="/risk" element={<RiskManager/>}/>
+          <Route path="/backtest" element={<Backtest/>}/>
+          <Route path="/settings" element={<Settings/>}/>
+        </Routes>
       </div>
+    </div>
     </BrowserRouter>
   )
 }
-
 export default App

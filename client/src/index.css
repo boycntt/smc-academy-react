@@ -41,31 +41,32 @@ body {
 .app { display: flex; min-height: 100vh; }
 
 .sidebar {
-  width: 260px;
+  width: 250px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border);
-  padding: 24px 0;
+  padding: 16px 0;
   position: fixed;
   height: 100vh;
   overflow-y: auto;
   z-index: 10;
-  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
 }
 
 .nav-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 20px; cursor: pointer;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px; cursor: pointer;
   transition: var(--transition);
   color: var(--text-secondary);
-  font-size: 14px; font-weight: 500;
+  font-size: 13px; font-weight: 500;
   text-decoration: none;
-  margin: 4px 12px;
+  margin: 1px 10px;
   border-radius: var(--radius-sm);
+  white-space: nowrap;
 }
 .nav-item:hover {
   background: var(--accent-glow);
   color: var(--text);
-  transform: translateX(3px);
 }
 .nav-item.active {
   background: linear-gradient(135deg, var(--accent-glow), rgba(106, 76, 224, 0.08));
@@ -73,7 +74,7 @@ body {
   font-weight: 600;
 }
 
-.main { margin-left: 260px; flex: 1; padding: 32px 36px; min-height: 100vh; }
+.main { margin-left: 250px; flex: 1; padding: 28px 32px; min-height: 100vh; }
 
 .stats-grid {
   display: grid;
