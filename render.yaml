@@ -4,9 +4,18 @@ services:
     runtime: node
     plan: free
     buildCommand: |
+      echo "=== Installing deps ==="
       npm install
-      cd client && npm install && npm run build && cd ..
-      cp -r client/dist server/public
+      echo "=== Building client ==="
+      cd client && npm install && npm run build
+      echo "=== Build output ==="
+      ls -la dist/
+      echo "=== Copying to server ==="
+      cd ..
+      mkdir -p server/public
+      cp -r client/dist/* server/public/
+      echo "=== Server public ==="
+      ls -la server/public/
     startCommand: node server/index.js
     envVars:
       - key: NODE_ENV

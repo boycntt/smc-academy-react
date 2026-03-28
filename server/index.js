@@ -10,11 +10,28 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// Serve React build
-const clientBuildPath = path.resolve(__dirname, 'public');
-console.log('Serving client from:', clientBuildPath);
-console.log('Client exists:', require('fs').existsSync(clientBuildPath));
+// Serve React build — try multiple possible locations
+const possiblePaths = [
+  path.join(__dirname, 'public'),          // server/public (after copy)
+  path.join(__dirname, '..', 'client', 'dist'),  // client/dist (direct)
+  path.join(process.cwd(), 'client', 'dist'),    // cwd/client/dist
+];
 
+let clientBuildPath = null;
+for (const p of possiblePaths) {
+  if (fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))) {
+    clientBuildPath = p;
+    break;
+  }
+}
+
+if (!clientBuildPath) {
+  console.error('WARNING: React build not found in any location!');
+  console.error('Checked:', possiblePaths);
+  clientBuildPath = possiblePaths[0]; // fallback
+}
+
+console.log('Serving client from:', clientBuildPath);
 app.use(express.static(clientBuildPath));
 
 // Database — use local data directory on Render (no disk needed)
