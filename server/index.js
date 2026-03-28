@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 // Serve React build
-const clientBuildPath = path.resolve(__dirname, '..', 'client', 'dist');
+const clientBuildPath = path.resolve(__dirname, 'public');
 console.log('Serving client from:', clientBuildPath);
 console.log('Client exists:', require('fs').existsSync(clientBuildPath));
 
@@ -206,9 +206,14 @@ app.post('/api/daily-review', (req, res) => {
 // Health
 app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
-// React fallback (SPA)
+// React SPA fallback
 app.get('*', (req, res) => {
-  res.sendFile(path.join(clientBuildPath, 'index.html'));
+  const indexPath = path.join(clientBuildPath, 'index.html');
+  if (require('fs').existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(500).json({ error: 'React build not found', path: indexPath });
+  }
 });
 
 app.listen(PORT, '0.0.0.0', () => {
