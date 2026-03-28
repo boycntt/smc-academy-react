@@ -14,13 +14,11 @@ app.use(express.json({ limit: '10mb' }));
 const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
 app.use(express.static(clientBuildPath));
 
-// Database
-const dbPath = process.env.NODE_ENV === 'production' 
-  ? '/var/data/smc.db' 
-  : path.join(__dirname, 'smc.db');
+// Database — use local data directory on Render (no disk needed)
+const dbDir = path.join(__dirname, 'data');
+const dbPath = path.join(dbDir, 'smc.db');
 
 // Ensure directory exists
-const dbDir = path.dirname(dbPath);
 if (!fs.existsSync(dbDir)) {
   fs.mkdirSync(dbDir, { recursive: true });
 }

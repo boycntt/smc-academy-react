@@ -12,8 +12,4 @@ services:
         value: production
       - key: PORT
         generateValue: true
-    disk:
-      name: sqlite-data
-      mountPath: /var/data
-      sizeGB: 1
     healthCheckPath: /api/health
