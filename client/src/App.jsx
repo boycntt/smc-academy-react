@@ -7,6 +7,7 @@ import Watchlist from './pages/Watchlist'
 import Calculator from './pages/Calculator'
 import SMCLearn from './pages/SMCLearn'
 import Psychology from './pages/Psychology'
+import Patterns from './pages/Patterns'
 
 const API = ''
 
@@ -67,6 +68,9 @@ function App() {
           <NavLink to="/knowledge" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
             <span style={{ width: 24, textAlign: 'center' }}>📚</span> SMC Knowledge
           </NavLink>
+          <NavLink to="/patterns" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span style={{ width: 24, textAlign: 'center' }}>🎯</span> Patterns
+          </NavLink>
           <NavLink to="/learn" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
             <span style={{ width: 24, textAlign: 'center' }}>🎓</span> Học SMC
           </NavLink>
@@ -86,6 +90,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/journal" element={<Journal />} />
             <Route path="/knowledge" element={<Knowledge />} />
+            <Route path="/patterns" element={<Patterns />} />
             <Route path="/learn" element={<SMCLearn />} />
             <Route path="/psychology" element={<Psychology />} />
             <Route path="/watchlist" element={<Watchlist />} />
