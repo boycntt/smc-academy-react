@@ -2,6 +2,7 @@ const express = require('express');
 const Database = require('better-sqlite3');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,14 @@ app.use(express.static(clientBuildPath));
 const dbPath = process.env.NODE_ENV === 'production' 
   ? '/var/data/smc.db' 
   : path.join(__dirname, 'smc.db');
+
+// Ensure directory exists
+const dbDir = path.dirname(dbPath);
+const fs = require('fs');
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new Database(dbPath);
 db.pragma('journal_mode = WAL');
 
